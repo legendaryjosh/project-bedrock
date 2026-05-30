@@ -1,0 +1,46 @@
+# Retail Store Sample App - Custom Values
+# NOTE: Replace placeholders after terraform apply
+# Get endpoints from: terraform output
+# Get password from: AWS Secrets Manager (project-bedrock-db-credentials)
+
+ui:
+  replicaCount: 1
+
+catalog:
+  replicaCount: 1
+  db:
+    endpoint: MYSQL_ENDPOINT_PLACEHOLDER
+    name: catalog
+    user: admin
+    password: DB_PASSWORD_PLACEHOLDER
+
+orders:
+  replicaCount: 1
+  db:
+    endpoint: POSTGRESQL_ENDPOINT_PLACEHOLDER
+    name: orders
+    user: admin
+    password: DB_PASSWORD_PLACEHOLDER
+
+cart:
+  replicaCount: 1
+  dynamodb:
+    tableName: project-bedrock-cart
+    region: us-east-1
+
+checkout:
+  replicaCount: 1
+
+# Disable in-cluster databases
+mysql:
+  enabled: false
+
+postgresql:
+  enabled: false
+
+# Keep message brokers in-cluster
+rabbitmq:
+  enabled: true
+
+redis:
+  enabled: true
