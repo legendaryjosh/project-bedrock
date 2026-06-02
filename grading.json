@@ -1,0 +1,57 @@
+{
+  "assets_bucket_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "bedrock-assets-alt-soe-025-3710"
+  },
+  "cluster_endpoint": {
+    "sensitive": false,
+    "type": "string",
+    "value": "https://B995ABE6A3211CED68281DF425677BD8.gr7.us-east-1.eks.amazonaws.com"
+  },
+  "cluster_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "project-bedrock-cluster"
+  },
+  "dev_user_access_key": {
+    "sensitive": false,
+    "type": "string",
+    "value": "AKIAUGZPRGMNWOYFDDPN"
+  },
+  "dev_user_password": {
+    "sensitive": true,
+    "type": "string",
+    "value": "REDACTED-SUBMIT-SEPARATELY"
+  },
+  "dev_user_secret_key": {
+    "sensitive": true,
+    "type": "string",
+    "value": "REDACTED-SUBMIT-SEPARATELY"
+  },
+  "dynamodb_table_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "project-bedrock-cart"
+  },
+  "mysql_endpoint": {
+    "sensitive": false,
+    "type": "string",
+    "value": "project-bedrock-mysql.cy7yw2c6shuc.us-east-1.rds.amazonaws.com:3306"
+  },
+  "postgresql_endpoint": {
+    "sensitive": false,
+    "type": "string",
+    "value": "project-bedrock-postgresql.cy7yw2c6shuc.us-east-1.rds.amazonaws.com:5432"
+  },
+  "region": {
+    "sensitive": false,
+    "type": "string",
+    "value": "us-east-1"
+  },
+  "vpc_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "vpc-0c0f1985d9acd9757"
+  }
+}

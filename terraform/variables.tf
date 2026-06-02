@@ -61,7 +61,7 @@ variable "app_namespace" {
 variable "db_username" {
   description = "Database Master Username"
   type        = string
-  default     = "admin"
+  default     = "bedrockadmin"
   sensitive   = true
 }
 

@@ -1,7 +1,5 @@
 # Retail Store Sample App - Custom Values
 # NOTE: Replace placeholders after terraform apply
-# Get endpoints from: terraform output
-# Get password from: AWS Secrets Manager (project-bedrock-db-credentials)
 
 ui:
   replicaCount: 1
@@ -11,7 +9,7 @@ catalog:
   db:
     endpoint: MYSQL_ENDPOINT_PLACEHOLDER
     name: catalog
-    user: admin
+    user: bedrockadmin
     password: DB_PASSWORD_PLACEHOLDER
 
 orders:
@@ -19,7 +17,7 @@ orders:
   db:
     endpoint: POSTGRESQL_ENDPOINT_PLACEHOLDER
     name: orders
-    user: admin
+    user: bedrockadmin
     password: DB_PASSWORD_PLACEHOLDER
 
 cart:

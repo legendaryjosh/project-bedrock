@@ -1,0 +1,287 @@
+# UI Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui
+  namespace: retail-app
+  labels:
+    app: ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      labels:
+        app: ui
+    spec:
+      containers:
+      - name: ui
+        image: public.ecr.aws/aws-containers/retail-store-sample-ui:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ENDPOINTS_CATALOG
+          value: "http://catalog:8080"
+        - name: ENDPOINTS_CART
+          value: "http://cart:8080"
+        - name: ENDPOINTS_ORDERS
+          value: "http://orders:8080"
+        - name: ENDPOINTS_CHECKOUT
+          value: "http://checkout:8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui
+  namespace: retail-app
+spec:
+  selector:
+    app: ui
+  ports:
+  - port: 80
+    targetPort: 8080
+---
+# Catalog Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog
+  namespace: retail-app
+  labels:
+    app: catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog
+  template:
+    metadata:
+      labels:
+        app: catalog
+    spec:
+      containers:
+      - name: catalog
+        image: public.ecr.aws/aws-containers/retail-store-sample-catalog:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: RETAIL_CATALOG_PERSISTENCE_PROVIDER
+          value: "mysql"
+        - name: RETAIL_CATALOG_PERSISTENCE_ENDPOINT
+          value: "project-bedrock-mysql.cy7yw2c6shuc.us-east-1.rds.amazonaws.com:3306"
+        - name: RETAIL_CATALOG_PERSISTENCE_DB_NAME
+          value: "catalog"
+        - name: RETAIL_CATALOG_PERSISTENCE_USER
+          value: "bedrockadmin"
+        - name: RETAIL_CATALOG_PERSISTENCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog
+  namespace: retail-app
+spec:
+  selector:
+    app: catalog
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+# Cart Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart
+  namespace: retail-app
+  labels:
+    app: cart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cart
+  template:
+    metadata:
+      labels:
+        app: cart
+    spec:
+      containers:
+      - name: cart
+        image: public.ecr.aws/aws-containers/retail-store-sample-cart:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: RETAIL_CART_PERSISTENCE_PROVIDER
+          value: "dynamodb"
+        - name: RETAIL_CART_PERSISTENCE_DYNAMODB_TABLENAME
+          value: "project-bedrock-cart"
+        - name: AWS_DEFAULT_REGION
+          value: "us-east-1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart
+  namespace: retail-app
+spec:
+  selector:
+    app: cart
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+# Orders Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders
+  namespace: retail-app
+  labels:
+    app: orders
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders
+  template:
+    metadata:
+      labels:
+        app: orders
+    spec:
+      containers:
+      - name: orders
+        image: public.ecr.aws/aws-containers/retail-store-sample-orders:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: RETAIL_ORDERS_PERSISTENCE_PROVIDER
+          value: "postgres"
+        - name: RETAIL_ORDERS_PERSISTENCE_POSTGRES_ENDPOINT
+          value: "project-bedrock-postgresql.cy7yw2c6shuc.us-east-1.rds.amazonaws.com"
+        - name: RETAIL_ORDERS_PERSISTENCE_POSTGRES_DBNAME
+          value: "orders"
+        - name: RETAIL_ORDERS_PERSISTENCE_POSTGRES_USERNAME
+          value: "bedrockadmin"
+        - name: RETAIL_ORDERS_PERSISTENCE_POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: password
+        - name: RETAIL_ORDERS_MESSAGING_PROVIDER
+          value: "in-memory"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders
+  namespace: retail-app
+spec:
+  selector:
+    app: orders
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+# Checkout Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout
+  namespace: retail-app
+  labels:
+    app: checkout
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: checkout
+  template:
+    metadata:
+      labels:
+        app: checkout
+    spec:
+      containers:
+      - name: checkout
+        image: public.ecr.aws/aws-containers/retail-store-sample-checkout:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: RETAIL_CHECKOUT_PERSISTENCE_PROVIDER
+          value: "redis"
+        - name: RETAIL_CHECKOUT_PERSISTENCE_REDIS_ADDR
+          value: "redis:6379"
+        - name: ENDPOINTS_ORDERS
+          value: "http://orders:8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: checkout
+  namespace: retail-app
+spec:
+  selector:
+    app: checkout
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+# Redis
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: retail-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:alpine
+        ports:
+        - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: retail-app
+spec:
+  selector:
+    app: redis
+  ports:
+  - port: 6379
+    targetPort: 6379
+---
+# Catalog ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog
+  namespace: retail-app
+data:
+  RETAIL_CATALOG_PERSISTENCE_PROVIDER: "mysql"
+  RETAIL_CATALOG_PERSISTENCE_ENDPOINT: "project-bedrock-mysql.cy7yw2c6shuc.us-east-1.rds.amazonaws.com:3306"
+  RETAIL_CATALOG_PERSISTENCE_DB_NAME: "catalog"
+---
+# ExternalName service pointing catalog-db to RDS MySQL
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog-db
+  namespace: retail-app
+spec:
+  type: ExternalName
+  externalName: project-bedrock-mysql.cy7yw2c6shuc.us-east-1.rds.amazonaws.com
