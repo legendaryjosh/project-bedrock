@@ -7,7 +7,7 @@
   "cluster_endpoint": {
     "sensitive": false,
     "type": "string",
-    "value": "https://B995ABE6A3211CED68281DF425677BD8.gr7.us-east-1.eks.amazonaws.com"
+    "value": "https://37D8EDCC6A4F9764C8B38DDCB1898842.gr7.us-east-1.eks.amazonaws.com"
   },
   "cluster_name": {
     "sensitive": false,
@@ -17,7 +17,7 @@
   "dev_user_access_key": {
     "sensitive": false,
     "type": "string",
-    "value": "AKIAUGZPRGMNWOYFDDPN"
+    "value": "AKIAUGZPRGMNQX2TXMLG"
   },
   "dev_user_password": {
     "sensitive": true,
@@ -52,6 +52,6 @@
   "vpc_id": {
     "sensitive": false,
     "type": "string",
-    "value": "vpc-0c0f1985d9acd9757"
+    "value": "vpc-063f982392900db96"
   }
 }

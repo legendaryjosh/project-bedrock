@@ -60,3 +60,4 @@ terraform output -json > ../grading.json
 ## Tags
 All resources tagged with: `Project: karatu-2025-capstone`
 # Project Bedrock - AWS EKS Capstone
+ 
